@@ -7,52 +7,49 @@ xl            = input("valor de xl: ");
 xu            = input("valor de xu: ");
 max_error     = input("valor máximo de error en %")/100.0;
 
-//Initialize user function
+//Initialize user function and required values
 deff('[y] = bisection(x)', user_function);
-
-//First iteration
-iteration = 1;
-xm    = (xl + xu)/2;
-_sign = bisection(xl)*bisection(xm) > 0;
-disp(iteration, "iteration: ");
-disp(xl, "xl: ");
-disp(xu, "xu: ");
-disp(xm, "xm: ");
-
-if(_sign) then 
-    disp("sign: +");
-else
-    disp("sign: -");
-end
-
+output = ["iteration", "xl", "xu", "xm", "sign", "error"];
+disp(output);
 _error = 1;
 
+//First iteration
+iteration   = 1;
+xm          = (xl + xu)/2;
+is_positive = bisection(xl)*bisection(xm) > 0;
+
+if(is_positive) then 
+    _sign = "+";
+else
+    _sign = "-";
+end
+
+output = ["  " + string(iteration), string(xl), string(xu), string(xm), _sign, "---"];
+disp(output);
+
 //Next iterations
-while _error >= max_error then
+while abs(_error) >= max_error then
     iteration = iteration + 1;
     prev_xm   = xm;
 
-    if(_sign) then 
-        xl = xm;
+    if(is_positive) then 
+        xl = prev_xm;
     else
-        xu = xu;
+        xu = prev_xm;
     end
 
     xm     = (xl + xu)/2;
-    _sign  = bisection(xl)*bisection(xu) > 0;
+    is_positive  = bisection(xl)*bisection(xm) > 0;
+
+    if(is_positive) then 
+        _sign = "+";
+    else
+        _sign = "-";
+    end
+
     _error = (xm - prev_xm)/xm;
 
     //Display values
-    disp(iteration, "iteration: ");
-    disp(xl, "xl: ");
-    disp(xu, "xu: ");
-    disp(xm, "xm: ");
-    
-    if(_sign) then 
-        disp("sign: +");
-    else
-        disp("sign: -");
-    end
-
-    disp(string(_error*100) + "%", "error: ");
+    output = ["  " + string(iteration), string(xl), string(xu), string(xm), _sign, string(abs(_error)*100) + "%"];
+    disp(output);
 end
