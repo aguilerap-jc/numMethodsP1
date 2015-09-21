@@ -68,6 +68,10 @@ function bisection_method()
 	    output = ["  " + string(iteration), string(xl), string(xu), string(xm), _sign, string(abs(_error)*100) + "%"];
 	    disp(output);
 	end
+
+	ri = xl-3:0.01:xu+3;
+	plot(ri,bisection(ri));
+	plot(xm,bisection(xm),'o')
 endfunction
 
 function secant_method()
@@ -106,6 +110,10 @@ function secant_method()
 	    x0 = x1;
 	    x1 = x2;
 	end
+
+	ri = x0-3:0.01:x1+3;
+	plot2d(ri,secant(ri));
+	plot(x1,0,'o');
 endfunction
 
 function newton_method()
@@ -123,7 +131,7 @@ function newton_method()
 	disp(output);
 
 	//First interation
-	iteration = 1;
+	iteration  = 1;
 	f_x0       = newton_raphson(x0);
 	deriv_f_x0 = numderivative(newton_raphson, x0);
 	x1         = x0 - f_x0/deriv_f_x0;
@@ -144,6 +152,11 @@ function newton_method()
 	    output = ["  " + string(iteration), string(x0), string(f_x0), string(deriv_f_x0), string(abs(_error)*100) + "%"];
 	    disp(output);
 	end
+
+	ri = x0-3:0.01:x0+3;
+	plot(ri,newton_raphson(ri));
+	plot(x1,0,'o');
+
 endfunction
 
 function bairstow_method()
