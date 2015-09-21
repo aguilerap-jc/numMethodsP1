@@ -169,4 +169,5 @@ function start()
 	elseif selected_method == 5 then
 		disp("Ending program");
 	end;
+end;
 endfunction;
