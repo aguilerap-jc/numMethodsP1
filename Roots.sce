@@ -3,14 +3,34 @@ e = 2.718281;
 
 function index_menu = display_menu()
     disp("Select one of the following methods:");
+	disp("1) Roots Methods");
+	disp("2) Non Linear Methods");
+    index_menu = input("Type the number of the numeric method you want to use: ");
+endfunction;
+
+function index_sub_menu_roots = display_menu_roots()
+    disp("Select one of the following methods:");
 	disp("1) Bisection Method");
 	disp("2) Secant Method");
 	disp("3) Newthon-Raphson Method");
-	disp("4) Bairstow Method")
-	disp("5) For going out of the program");
+	disp("4) Bairstow Method");
+	disp("0) For going out of the program");
 	disp("");
 
-    index_menu = input("Type the number of the numeric method you want to use: ");
+    index_sub_menu_roots = input("Type the number of the numeric method you want to use: ");
+endfunction;
+
+function index_sub_menu_non_linear = display_menu_non_linear()
+    disp("Select one of the following methods:");
+	disp("1) Gauss Elimination With Partial Pivoting");
+	disp("2) Gauss Jordan");
+	disp("3) LU Decomposition");
+	disp("4) Gauss Seidel");
+	disp("5) Newton´s for Non Linear Equation");
+	disp("0) For going out of the program");
+	disp("");
+
+    index_sub_menu_non_linear = input("Type the number of the numeric method you want to use: ");
 endfunction;
 
 function bisection_method()
@@ -156,7 +176,6 @@ function newton_method()
 	ri = x0-3:0.01:x0+3;
 	plot(ri,newton_raphson(ri));
 	plot(x1,0,'o');
-
 endfunction
 
 function bairstow_method()
@@ -236,27 +255,109 @@ function bairstow_method()
     disp(root_2);
 endfunction
 
+function Partial_Pivoting_Method()
+// Partial Pivoting Method
+	//disp("Partial_Pivoting_Method Function Executing");
+	disp("Type the function to evaluate with the following format:");
+	maxIterations = input("Set the max number of iterations ");
+	expectedError = input("Set the expected error you want (on porcentage) ");
+	disp(" y=a*x^n + b*x^(n-1) + c*x^(n-2) ..., where a, b, c are constants");
+	//user_function = input("","string");
+	//xl            = input("xl value: ");
+	//xu            = input("xu value: ");
+	//max_error     = input("max error value in %")/100.0;
+endfunction
+
+function Gauss_Jordan_Method()
+//Gauss Jordan Method
+	disp("Gauss_Jordan_Method Function Executing");
+	disp("Type the function to evaluate with the following format:");
+	maxIterations = input("Set the max number of iterations ");
+	expectedError = input("Set the expected error you want (on porcentage) ");
+	
+endfunction
+
+function LU_Decomposition()
+//LU Decomposition
+	disp("LU_Decomposition Function Executing");
+	disp("Type the function to evaluate with the following format:");
+	maxIterations = input("Set the max number of iterations ");
+	expectedError = input("Set the expected error you want (on porcentage) ");
+	
+endfunction
+
+function Gauss_Seidel()
+//Gauss Seidel Method
+	disp("Gauss_Seidel Function Executing");
+	disp("Type the function to evaluate with the following format:");
+	maxIterations = input("Set the max number of iterations ");
+	expectedError = input("Set the expected error you want (on porcentage) ");
+	
+endfunction
+
+function Newthon_Non_Linear()
+//Newthon Non Linear Method
+	disp("Newthon Non Linear Function Executing");
+	disp("Type the function to evaluate with the following format:");
+	maxIterations = input("Set the max number of iterations ");
+	expectedError = input("Set the expected error you want (on porcentage) ");
+	
+endfunction
+
 function start()
-    selected_method = display_menu();
-    
-    while selected_method <> 5 & selected_method <> 1 & selected_method <> 2 & selected_method <> 3 & selected_method <> 4 then 
-        disp("Invalid input, please try again");        
-        selected_method = display_menu();
-    end;
-    
-    if selected_method == 1 then
-		disp("Executing Bisection Method");
-		bisection_method();
-	elseif selected_method == 2 then
-		disp("Executing Secant Method");
-		secant_method();
-	elseif selected_method == 3 then
-		disp("Executing Newthon-Raphson Method")
-		newton_method();
-	elseif selected_method == 4 then
-		disp('Executing Bairstow Method');
-		bairstow_method();
-	elseif selected_method == 5 then
-		disp("Ending program");
+    selected_menu = display_menu();
+
+    if selected_menu == 1 then
+		disp("Roots Menu");
+		selected_method = display_menu_roots();
+		
+		while selected_method <> 5 & selected_method <> 1 & selected_method <> 2 & selected_method <> 3 & selected_method <> 4 then 
+		    disp("Invalid input, please try again");        
+		    selected_method = display_menu_roots();
+		end;
+		    
+		if selected_method == 1 then
+			disp("Executing Bisection Method");
+			bisection_method();
+		elseif selected_method == 2 then
+			disp("Executing Secant Method");
+			secant_method();
+		elseif selected_method == 3 then
+			disp("Executing Newthon-Raphson Method")
+			newton_method();
+		elseif selected_method == 4 then
+			disp('Executing Bairstow Method');
+			bairstow_method();
+		elseif selected_method == 5 then
+			disp("Ending program");
+		end;
+
+	elseif selected_menu == 2 then
+		disp("Non Linear Menu");
+		selected_method = display_menu_non_linear();
+		
+		while selected_method <> 5 & selected_method <> 1 & selected_method <> 2 & selected_method <> 3 & selected_method <> 4 then 
+		    disp("Invalid input, please try again");        
+		    selected_method = display_menu_non_linear();
+		end;
+		    
+		if selected_method == 1 then
+			disp("Gauss Elimination With Partial Pivoting Method");
+			Partial_Pivoting_Method();
+		elseif selected_method == 2 then
+			disp("Gauss Jordan Method");
+			Gauss_Jordan_Method();
+		elseif selected_method == 3 then
+			disp("LU Decomposition Method")
+			LU_Decomposition();
+		elseif selected_method == 4 then
+			disp('Gauss Seidel Method');
+			Gauss_Seidel();
+		elseif selected_method == 5 then
+			disp('Newton´s for Non Linear Equation Method');
+			Newthon_Non_Linear();
+		elseif selected_method == 0 then
+			disp("Ending program");
+		end;
 	end;
 endfunction;
