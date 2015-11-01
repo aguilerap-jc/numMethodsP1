@@ -279,7 +279,7 @@ function Partial_Pivoting_Method()
     matrix_B(1) = (matrix_B(1) - matrix_A(1,2) * matrix_B(2) -  matrix_A(1,3) * matrix_B(3)) / matrix_A(1,1)
     disp("La solución para x es:")
 	disp(matrix_B);
-
+//Partial_Pivotin_method
 endfunction
 
 
@@ -368,8 +368,6 @@ function LU_Decomposition()
 			matrix_B(j, :) = next_row_B - actual_row_B*value_2_A/value_1_A;
 			matrix_L(j,i) = value_2_A/value_1_A;
 		end
-		//matrix_A(i, :) = actual_row_A/actual_row_A(i);
-        //matrix_B(i, :) = actual_row_B/actual_row_A(i);
 	end
 	matrix_U = matrix_A;
 
@@ -421,17 +419,8 @@ function Gauss_Seidel()
 	disp("Type the function to evaluate with the following format:");
 	maxIterations = input("Set the max number of iterations ");
 	expectedError = input("Set the expected error you want (on porcentage) ");
-	
 endfunction
 
-function Newthon_Non_Linear()
-//Newthon Non Linear Method
-	disp("Newthon Non Linear Function Executing");
-	disp("Type the function to evaluate with the following format:");
-	maxIterations = input("Set the max number of iterations ");
-	expectedError = input("Set the expected error you want (on porcentage) ");
-	
-endfunction
 
 function start()
     selected_menu = display_menu();
@@ -482,9 +471,6 @@ function start()
 		elseif selected_method == 4 then
 			disp('Gauss Seidel Method');
 			Gauss_Seidel();
-		elseif selected_method == 5 then
-			disp('Newton´s for Non Linear Equation Method');
-			Newthon_Non_Linear();
 		elseif selected_method == 0 then
 			disp("Ending program");
 		end;
