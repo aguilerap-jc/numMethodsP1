@@ -274,16 +274,69 @@ function Gauss_Jordan_Method()
 	disp("Type the function to evaluate with the following format:");
 	maxIterations = input("Set the max number of iterations ");
 	expectedError = input("Set the expected error you want (on porcentage) ");
-	
 endfunction
 
 function LU_Decomposition()
 //LU Decomposition
 	disp("LU_Decomposition Function Executing");
-	disp("Type the function to evaluate with the following format:");
-	maxIterations = input("Set the max number of iterations ");
-	expectedError = input("Set the expected error you want (on porcentage) ");
-	
+    //Definir Matriz A
+	matrix_A = input("Define matrix A ");
+	//Definir Matriz B
+	matrix_B = input("Define matrix B ");
+	//n = Renglones
+	n   = size(matrix_A, "r");
+	[renglon,columna] = size(matrix_A);
+    //Definir matriz L con 0
+    matrix_L = zeros(renglon,columna);
+    //Definir matriz U con 0
+    matrix_U = zeros(renglon,columna);
+
+	for i=1: n
+		//Sacar el i renglon de la matriz A
+		actual_row_A = matrix_A(i,:);
+		//Obtener el primer cada uno de los valores de la matriz
+		value_1_A = matrix_A(i,i);
+		//Sacar el i renglon de B
+		actual_row_B = matrix_B(i,:);
+		//Asigna los valores de la matriz U de la diagonal
+		matrix_U(i,i) = value_1_A;
+		for j = i+1 : n
+            //disp(i);
+            //disp(j);
+            //Sacar el segundo renglon de A
+			next_row_A = matrix_A(j, :);
+			value_2_A = matrix_A(j,i);
+			matrix_A(j, :) = next_row_A - actual_row_A*value_2_A/value_1_A;
+			next_row_B = matrix_B(j, :);
+			matrix_B(j, :) = next_row_B - actual_row_B*value_2_A/value_1_A;
+			matrix_L(j,i) = value_2_A/value_1_A;
+		end
+
+		matrix_A(i, :) = actual_row_A/actual_row_A(i);
+        matrix_B(i, :) = actual_row_B/actual_row_A(i);
+	end
+
+    for i=n :-1 : 1
+		actual_row_A = matrix_A(i,:);
+		value_1_A = matrix_A(i,i);
+		actual_row_B = matrix_B(i,:);
+
+		for j=i-1:-1:1
+			next_row_A = matrix_A(j, :);
+			value_2_A = matrix_A(j,i);
+			matrix_A(j, :) = next_row_A - actual_row_A*value_2_A/value_1_A;
+			next_row_B = matrix_B(j, :);
+			matrix_B(j, :) = next_row_B - actual_row_B*value_2_A/value_1_A;
+			//Guarda los valores en la matriz U
+			matrix_U(j,i) = value_2_A/value_1_A;
+		end
+
+	end
+
+	disp(matrix_L);
+	disp(matrix_A);
+	disp(matrix_B);
+	disp(matrix_U);
 endfunction
 
 function Gauss_Seidel()
