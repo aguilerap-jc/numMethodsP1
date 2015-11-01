@@ -256,12 +256,8 @@ function bairstow_method()
 endfunction
 
 function Partial_Pivoting_Method()
-// Partial Pivoting Method
-	//disp("Partial_Pivoting_Method Function Executing");
-	disp("Type the function to evaluate with the following format:");
-	maxIterations = input("Set the max number of iterations ");
-	expectedError = input("Set the expected error you want (on porcentage) ");
-	disp(" y=a*x^n + b*x^(n-1) + c*x^(n-2) ..., where a, b, c are constants");
+    //Partial Pivoting Method
+	disp("Partial_Pivoting_Method Function Executing");
 	matrix_A = input("Define matrix A");
 	matrix_B = input("Define matrix B");
     n   = size(matrix_A, "r");
@@ -279,8 +275,8 @@ function Partial_Pivoting_Method()
 	end
 
 	matrix_B(3) = matrix_B(3) /matrix_A(3,3)
-    matrix_B(2) = (matrix_B(2) - matrix_A(2,3) * x3) / matrix_A(2,2)
-    matrix_B(1) = (matrix_B(1) - matrix_A(1,2) * x2 -  matrix_A(1,3) * x3) / matrix_A(1,1)
+    matrix_B(2) = (matrix_B(2) - matrix_A(2,3) * matrix_B(3)) / matrix_A(2,2)
+    matrix_B(1) = (matrix_B(1) - matrix_A(1,2) * matrix_B(2) -  matrix_A(1,3) * matrix_B(3)) / matrix_A(1,1)
     disp("La solución para x es:")
 	disp(matrix_B);
 
