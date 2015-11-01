@@ -422,13 +422,13 @@ function Gauss_Seidel()
 	newX3 = input("Initia value of X2 ");
 	disp("introduce the constants of each equation in matrix style ")
 	disp("  Array{A,B,C;D,E,F;G,H,I}")
+    matrixA = input("Matrix A : ");
 	//ask for the equation in vector format
 	disp("introduce the other side of the equaility")
 	disp("  Array{A;B;C}")
 	matrixB = input("Matrix B : ");
 	_error = input("max error value in % ")/100.0;
 	//flag to detect that the error is less than the maxError
-	disp(_error)
 	maxError = _error + 1
 	actualError = 0
 	//verify that the matrix is Diagonally dominant
