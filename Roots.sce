@@ -262,10 +262,28 @@ function Partial_Pivoting_Method()
 	maxIterations = input("Set the max number of iterations ");
 	expectedError = input("Set the expected error you want (on porcentage) ");
 	disp(" y=a*x^n + b*x^(n-1) + c*x^(n-2) ..., where a, b, c are constants");
-	//user_function = input("","string");
-	//xl            = input("xl value: ");
-	//xu            = input("xu value: ");
-	//max_error     = input("max error value in %")/100.0;
+	matrix_A = input("Define matrix A");
+	matrix_B = input("Define matrix B");
+    n   = size(matrix_A, "r");
+	for i=1: n
+		actual_row_A = matrix_A(i,:);
+		value_1_A = matrix_A(i,i);
+		actual_row_B = matrix_B(i,:);
+		for j=i+1: n
+			next_row_A = matrix_A(j, :);
+			value_2_A = matrix_A(j,i);
+			matrix_A(j, :) = next_row_A - actual_row_A*value_2_A/value_1_A;
+			next_row_B = matrix_B(j, :);
+			matrix_B(j, :) = next_row_B - actual_row_B*value_2_A/value_1_A;
+		end
+	end
+
+	matrix_B(3) = matrix_B(3) /matrix_A(3,3)
+    matrix_B(2) = (matrix_B(2) - matrix_A(2,3) * x3) / matrix_A(2,2)
+    matrix_B(1) = (matrix_B(1) - matrix_A(1,2) * x2 -  matrix_A(1,3) * x3) / matrix_A(1,1)
+    disp("La solución para x es:")
+	disp(matrix_B);
+
 endfunction
 
 
