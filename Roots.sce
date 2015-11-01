@@ -268,13 +268,45 @@ function Partial_Pivoting_Method()
 	//max_error     = input("max error value in %")/100.0;
 endfunction
 
+
 function Gauss_Jordan_Method()
-//Gauss Jordan Method
-	disp("Gauss_Jordan_Method Function Executing");
-	disp("Type the function to evaluate with the following format:");
-	maxIterations = input("Set the max number of iterations ");
-	expectedError = input("Set the expected error you want (on porcentage) ");
-	
+	matrix_A = input("Define matrix A");
+	matrix_B = input("Define matrix B");
+	n = size(matrix_A, "r");
+
+	for i=1: n
+		actual_row_A = matrix_A(i,:);
+		value_1_A = matrix_A(i,i);
+		actual_row_B = matrix_B(i,:);
+
+		for j=i+1: n
+			next_row_A = matrix_A(j, :);
+			value_2_A  = matrix_A(j,i);
+			matrix_A(j, :) = next_row_A - actual_row_A*value_2_A/value_1_A;
+			next_row_B = matrix_B(j, :);
+			matrix_B(j, :) = next_row_B - actual_row_B*value_2_A/value_1_A;
+		end
+
+		matrix_A(i, :) = actual_row_A/actual_row_A(i);
+        matrix_B(i, :) = actual_row_B/actual_row_A(i);
+	end
+
+    for i=n:-1:1
+		actual_row_A = matrix_A(i,:);
+		value_1_A    = matrix_A(i,i);
+		actual_row_B = matrix_B(i,:);
+
+		for j=i-1:-1:1
+			next_row_A = matrix_A(j, :);
+			value_2_A = matrix_A(j,i);
+			matrix_A(j, :) = next_row_A - actual_row_A*value_2_A/value_1_A;
+			next_row_B = matrix_B(j, :);
+			matrix_B(j, :) = next_row_B - actual_row_B*value_2_A/value_1_A;
+		end
+	end
+
+	disp("La solución para x es:")
+	disp(matrix_B);
 endfunction
 
 function LU_Decomposition()
@@ -361,3 +393,5 @@ function start()
 		end;
 	end;
 endfunction;
+
+//la de arriba se resta
