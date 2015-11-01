@@ -414,15 +414,15 @@ function LU_Decomposition()
 endfunction
 
 function Gauss_Seidel()
-//Gauss Seidel Method
-	disp("Gauss_Seidel Function Executing");
+	disp("Gauss_Seidel Function Executing ...");
+	disp("In vector format {x1,x2,x3,x4,...,xn}")
 	//ask for the initial values of the X values
-	newX1 = input("Initia value of X1 ");
-	newX2 = input("Initia value of X2 ");
-	newX3 = input("Initia value of X2 ");
+	_new = input("Initial values for you X :")
 	disp("introduce the constants of each equation in matrix style ")
 	disp("  Array{A,B,C;D,E,F;G,H,I}")
-    matrixA = input("Matrix A : ");
+  matrixA = input("Matrix A : ");
+	//get the size of the matrix
+	_size = size (matrixA, "r")
 	//ask for the equation in vector format
 	disp("introduce the other side of the equaility")
 	disp("  Array{A;B;C}")
@@ -430,50 +430,75 @@ function Gauss_Seidel()
 	_error = input("max error value in % ")/100.0;
 	//flag to detect that the error is less than the maxError
 	maxError = _error + 1
-	actualError = 0
+	actualError = zeros(_size,1)
+	//flag to detect non Diagonal Dominant Matrix
+	flagNonDiagonal = 0
+	//variable to save the sum of each row
+	totalInLine = zeros(_size,1)
+	//array of new and old values of all X variables i.e x1,x2..xn
+	_old = zeros(_size, 1)
+	iteration = 1
+
 	//verify that the matrix is Diagonally dominant
-	if matrixA(1,1) > (matrixA(1,2) + matrixA(1,3)) then
-			if matrixA(2,2) > (matrixA(2,1) + matrixA(2,3)) then
-        if matrixA(3,3) > (matrixA(3,1) + matrixA(3,2)) then
-            while maxError > _error 
-                //save values 
-                oldX1 = newX1
-                oldX2 = newX2
-                oldX3 = newX3  
-                //solution for x1 and error detection
-                newX1 =( matrixB(1) - oldX2 * matrixA(1,2) - oldX3 * matrixA(1,3)) / matrixA(1,1)
-				maxError = (newX1 - oldX1)/newX1
-                //solution for x2 and error detection
-				newX2 = (matrixB(2) - newX1 * matrixA(2,1) - oldX3 * matrixA(2,3)) / matrixA(2,2)
-				actualError = (newX2 - oldX2) / newX2
-				if(actualError > maxError) then
-					maxError = actualError	
+	for i = 1 : _size	
+			for j = 1 : _size
+					if j <> i then
+							totalInLine(i) = totalInLine(i) + matrixA(i,j)
+					end
+			end
+			if matrixA(i,i) < totalInLine(i) then
+					flagNonDiagonal = 1
+			end
+	end
+	//if its diagonal dominat proceed
+	if flagNonDiagonal == 0 then
+		//do the procedure until reaching a maxError value that is less than the set error
+		while maxError > _error 
+				for i = 1 : _size
+						//save the value of to get the error value
+						_old(i) = _new(i)
+						tmpX = 0
+						//sum of all values in row that are not in the main diagonal
+						//and multiply each of them by their corresponding X value
+						for j = 1 : _size
+								if j <> i then
+										tmpX = tmpX + _new(j) * matrixA(i,j)		
+								end
+						end
+						//get the newest value for the X that we are trying to find
+						_new(i) = (matrixB(i) - tmpX) / matrixA(i,i)
+						//get the error 
+						actualError(i) = abs((_new(i) - _old(i)) / _new(i)) 
+						if(i == 1) then
+							maxError = actualError(i)
+						end
 				end
-                //solution for x3 and error detection
-				newX3 = (matrixB(3) - newX1 * matrixA(3,1) - newX2 * matrixA(3,2)) / matrixA(3,3)
-				actualError = (newX3 - oldX3) / newX3
-                if(actualError > maxError) then
-					maxError = actualError
+				//verify if this round got the maxError
+				if(actualError(i) > maxError) then
+						maxError = actualError(i)
 				end	
-            end
-        else
-            disp("not a Diagonally dominant matrix3")
-        end
-    else
-        disp("not a Diagonally dominant matrix2")
-    end
-	else
+				//output setting
+				sizeOfMatrixOutput = (_size + _size + 1)
+				output = zeros(1,sizeOfMatrixOutput)
+				output(1,1) = iteration 
+				for k = 2 : sizeOfMatrixOutput 
+						if k < (_size + 2) then
+								//write the value of X
+								output(1,k) = _new(k - 1)
+						else
+								//write the values of the errors
+								posOfError = (k-_size-1)
+								output(1,k) = actualError(posOfError) * 100	
+						end
+				end
+				disp("| Iter | values of X {x1 .. xn} | Error {E1 .. En |}")
+				disp(output)
+				iteration = iteration + 1
+		end
+	else 
     disp("not a Diagonally dominant matrix1")
 	end
-	disp("final values ")
-	disp("x1")
-	disp(newX1)
-	disp("x2")
-	disp(newX2)
-	disp("x3")
-	disp(newX3)
 endfunction
-
 
 function start()
     selected_menu = display_menu();
