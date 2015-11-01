@@ -321,6 +321,8 @@ function LU_Decomposition()
 	matrix_A = input("Define matrix A ");
 	//Definir Matriz B
 	matrix_B = input("Define matrix B ");
+	matrix_AO = matrix_A;
+	matrix_BO = matrix_B;
 	//n = Renglones
 	n   = size(matrix_A, "r");
 	[renglon,columna] = size(matrix_A);
@@ -328,8 +330,13 @@ function LU_Decomposition()
     matrix_L = zeros(renglon,columna);
     //Definir matriz U con 0
     matrix_U = zeros(renglon,columna);
-
-	for i=1: n
+    matrix_X = ones(n);
+    matrix_Z = ones(n);
+    matrix_Temp = ones(n);
+    for i = 1 : n
+    	matrix_L(i,i) = 1;
+    end
+    for i=1: n
 		//Sacar el i renglon de la matriz A
 		actual_row_A = matrix_A(i,:);
 		//Obtener el primer cada uno de los valores de la matriz
@@ -339,8 +346,6 @@ function LU_Decomposition()
 		//Asigna los valores de la matriz U de la diagonal
 		matrix_U(i,i) = value_1_A;
 		for j = i+1 : n
-            //disp(i);
-            //disp(j);
             //Sacar el segundo renglon de A
 			next_row_A = matrix_A(j, :);
 			value_2_A = matrix_A(j,i);
@@ -349,10 +354,10 @@ function LU_Decomposition()
 			matrix_B(j, :) = next_row_B - actual_row_B*value_2_A/value_1_A;
 			matrix_L(j,i) = value_2_A/value_1_A;
 		end
-
-		matrix_A(i, :) = actual_row_A/actual_row_A(i);
-        matrix_B(i, :) = actual_row_B/actual_row_A(i);
+		//matrix_A(i, :) = actual_row_A/actual_row_A(i);
+        //matrix_B(i, :) = actual_row_B/actual_row_A(i);
 	end
+	matrix_U = matrix_A;
 
     for i=n :-1 : 1
 		actual_row_A = matrix_A(i,:);
@@ -365,16 +370,35 @@ function LU_Decomposition()
 			matrix_A(j, :) = next_row_A - actual_row_A*value_2_A/value_1_A;
 			next_row_B = matrix_B(j, :);
 			matrix_B(j, :) = next_row_B - actual_row_B*value_2_A/value_1_A;
-			//Guarda los valores en la matriz U
-			matrix_U(j,i) = value_2_A/value_1_A;
 		end
-
+	end
+	matrix_Z(1) = matrix_BO(1);
+	for i = 2 : n
+		matrix_Z(i) = matrix_BO(i)
+		for j = i-1 :-1 : 1
+			matrix_Z(i)=matrix_Z(i)-matrix_L(i,j)*matrix_Z(j);
+		end
 	end
 
+	for i = n : -1	: 1
+		matrix_X(i) = matrix_Z(i);
+		for j = i+1 : n
+			matrix_X(i)=matrix_X(i)-matrix_U(i,j)*matrix_X(j);
+		end
+		matrix_X(i) = matrix_X(i)/matrix_U(i,i);
+	end
+	disp("A matrix");
+	disp(matrix_AO);
+	disp("B matrix");
+	disp(matrix_BO);
+	disp("L matrix");
 	disp(matrix_L);
-	disp(matrix_A);
-	disp(matrix_B);
+	disp("Z values");
+	disp(matrix_Z);
+	disp("U matrix");
 	disp(matrix_U);
+	disp("X values");
+	disp(matrix_X);
 endfunction
 
 function Gauss_Seidel()
