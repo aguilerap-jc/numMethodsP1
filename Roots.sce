@@ -419,7 +419,6 @@ function Gauss_Seidel()
 	disp("Type the function to evaluate with the following format:");
 	maxIterations = input("Set the max number of iterations ");
 	expectedError = input("Set the expected error you want (on porcentage) ");
-<<<<<<< HEAD
 	//ask for the initial values of the X values
 	newX1 = input("Initia value of X1 ");
 	newX2 = input("Initia value of X2 ");
@@ -477,8 +476,6 @@ function Gauss_Seidel()
 	disp(newX2)
 	disp("x3")
 	disp(newX3)
-=======
->>>>>>> 0adcbfb4d0b8307a2d9d47b7dee73393b6a10117
 endfunction
 
 
