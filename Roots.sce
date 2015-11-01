@@ -416,9 +416,6 @@ endfunction
 function Gauss_Seidel()
 //Gauss Seidel Method
 	disp("Gauss_Seidel Function Executing");
-	disp("Type the function to evaluate with the following format:");
-	maxIterations = input("Set the max number of iterations ");
-	expectedError = input("Set the expected error you want (on porcentage) ");
 	//ask for the initial values of the X values
 	newX1 = input("Initia value of X1 ");
 	newX2 = input("Initia value of X2 ");
@@ -426,7 +423,6 @@ function Gauss_Seidel()
 	disp("introduce the constants of each equation in matrix style ")
 	disp("  Array{A,B,C;D,E,F;G,H,I}")
 	//ask for the equation in vector format
-	matrixA = input("Matrix A : ");
 	disp("introduce the other side of the equaility")
 	disp("  Array{A;B;C}")
 	matrixB = input("Matrix B : ");
