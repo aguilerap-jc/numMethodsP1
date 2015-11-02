@@ -26,7 +26,6 @@ function index_sub_menu_non_linear = display_menu_non_linear()
 	disp("2) Gauss Jordan");
 	disp("3) LU Decomposition");
 	disp("4) Gauss Seidel");
-	disp("5) Newton´s for Non Linear Equation");
 	disp("0) For going out of the program");
 	disp("");
 
@@ -261,6 +260,7 @@ function Partial_Pivoting_Method()
 	matrix_A = input("Define matrix A");
 	matrix_B = input("Define matrix B");
     n   = size(matrix_A, "r");
+
 	for i=1: n
 		actual_row_A = matrix_A(i,:);
 		value_1_A = matrix_A(i,i);
@@ -274,21 +274,22 @@ function Partial_Pivoting_Method()
 		end
 	end
 
-	matrix_B(3) = matrix_B(3) /matrix_A(3,3)
-    matrix_B(2) = (matrix_B(2) - matrix_A(2,3) * matrix_B(3)) / matrix_A(2,2)
-    matrix_B(1) = (matrix_B(1) - matrix_A(1,2) * matrix_B(2) -  matrix_A(1,3) * matrix_B(3)) / matrix_A(1,1)
-    disp("La solución para x es:")
+	for i = n : -1	: 1;
+		for j = i+1 : n
+			matrix_B(i)=matrix_B(i)-matrix_A(i,j)*matrix_B(j);
+		end
+		matrix_B(i) = matrix_B(i)/matrix_A(i,i);
+	end
+
+    disp("The solution for x is:")
 	disp(matrix_B);
-//Partial_Pivotin_method
+	//Partial_Pivotin_method
 endfunction
 
 
 function Gauss_Jordan_Method()
-//Gauss Jordan Method
+	//Gauss Jordan Method
 	disp("Gauss_Jordan_Method Function Executing");
-	disp("Type the function to evaluate with the following format:");
-	maxIterations = input("Set the max number of iterations ");
-	expectedError = input("Set the expected error you want (on porcentage) ");
 	matrix_A = input("Define matrix A");
 	matrix_B = input("Define matrix B");
 	n = size(matrix_A, "r");
@@ -413,92 +414,7 @@ function LU_Decomposition()
 	disp(matrix_X);
 endfunction
 
-function Gauss_Seidel()
-	disp("Gauss_Seidel Function Executing ...");
-	disp("In vector format {x1,x2,x3,x4,...,xn}")
-	//ask for the initial values of the X values
-	_new = input("Initial values for you X :")
-	disp("introduce the constants of each equation in matrix style ")
-	disp("  Array{A,B,C;D,E,F;G,H,I}")
-  matrixA = input("Matrix A : ");
-	//get the size of the matrix
-	_size = size (matrixA, "r")
-	//ask for the equation in vector format
-	disp("introduce the other side of the equaility")
-	disp("  Array{A;B;C}")
-	matrixB = input("Matrix B : ");
-	_error = input("max error value in % ")/100.0;
-	//flag to detect that the error is less than the maxError
-	maxError = _error + 1
-	actualError = zeros(_size,1)
-	//flag to detect non Diagonal Dominant Matrix
-	flagNonDiagonal = 0
-	//variable to save the sum of each row
-	totalInLine = zeros(_size,1)
-	//array of new and old values of all X variables i.e x1,x2..xn
-	_old = zeros(_size, 1)
-	iteration = 1
 
-	//verify that the matrix is Diagonally dominant
-	for i = 1 : _size	
-			for j = 1 : _size
-					if j <> i then
-							totalInLine(i) = totalInLine(i) + matrixA(i,j)
-					end
-			end
-			if matrixA(i,i) < totalInLine(i) then
-					flagNonDiagonal = 1
-			end
-	end
-	//if its diagonal dominat proceed
-	if flagNonDiagonal == 0 then
-		//do the procedure until reaching a maxError value that is less than the set error
-		while maxError > _error 
-				for i = 1 : _size
-						//save the value of to get the error value
-						_old(i) = _new(i)
-						tmpX = 0
-						//sum of all values in row that are not in the main diagonal
-						//and multiply each of them by their corresponding X value
-						for j = 1 : _size
-								if j <> i then
-										tmpX = tmpX + _new(j) * matrixA(i,j)		
-								end
-						end
-						//get the newest value for the X that we are trying to find
-						_new(i) = (matrixB(i) - tmpX) / matrixA(i,i)
-						//get the error 
-						actualError(i) = abs((_new(i) - _old(i)) / _new(i)) 
-						if(i == 1) then
-							maxError = actualError(i)
-						end
-				end
-				//verify if this round got the maxError
-				if(actualError(i) > maxError) then
-						maxError = actualError(i)
-				end	
-				//output setting
-				sizeOfMatrixOutput = (_size + _size + 1)
-				output = zeros(1,sizeOfMatrixOutput)
-				output(1,1) = iteration 
-				for k = 2 : sizeOfMatrixOutput 
-						if k < (_size + 2) then
-								//write the value of X
-								output(1,k) = _new(k - 1)
-						else
-								//write the values of the errors
-								posOfError = (k-_size-1)
-								output(1,k) = actualError(posOfError) * 100	
-						end
-				end
-				disp("| Iter | values of X {x1 .. xn} | Error {E1 .. En |}")
-				disp(output)
-				iteration = iteration + 1
-		end
-	else 
-    disp("not a Diagonally dominant matrix1")
-	end
-endfunction
 
 function start()
     selected_menu = display_menu();
@@ -547,12 +463,10 @@ function start()
 			disp("LU Decomposition Method")
 			LU_Decomposition();
 		elseif selected_method == 4 then
-			disp('Gauss Seidel Method');
+			disp("Gauss Seidel Method");
 			Gauss_Seidel();
 		elseif selected_method == 0 then
 			disp("Ending program");
 		end;
 	end;
 endfunction;
-
-//la de arriba se resta
