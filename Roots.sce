@@ -5,6 +5,10 @@ function index_menu = display_menu()
     disp("Select one of the following methods:");
 	disp("1) Roots Methods");
 	disp("2) Non Linear Methods");
+	disp("3) Linear Regression Method ")
+	disp("4) Interpolation Direct Method")
+	disp("5) Integration Trapezoidal")
+	disp("6) Integration Roomberg")
     index_menu = input("Type the number of the numeric method you want to use: ");
 endfunction;
 
@@ -504,6 +508,63 @@ function Gauss_Seidel()
 	end
 endfunction
 
+function Linear_Regression_Method()
+	disp("Executing Linear_Regression_Method");
+endfunction
+
+function Interpolation_Direct_Method()
+	disp("Executing Interpolation_Direct_Method");
+endfunction
+
+function Integration_Trapezoidal()
+	disp("Executing Integration_Trapezoidal");
+	disp("Type the coefficients of the polynomial in a decreasing order of the function degree :");
+    disp("[1, 2, 3, 4] means 1*x^3 + 2*x^2 + 3*x^1 + 4*x^0");
+    a_values  = input("values  ");
+   	lower_lim = input("Insert the lower limit of the Integral : ");
+   	upper_lim = input("Insert the upper limit of the Integral : ");
+   	n_segments= input("Insert the number of segments :");
+   	integral_range = upper_lim - lower_lim;
+   	h = integral_range/n_segments;
+   	// I = (b-a)/(2*n) {sumation functions} 
+   	formula_h = h/2;  //formula_h = (b-a)/(2*n) 
+   	[x,tam_poly] = size(a_values);
+   	acum_function = 0;
+   	primerValorPol = 0;
+   	nValorPol = 0;
+   	sumation_functions = 0;
+   	func_val_array = zeros(n_segments);
+
+	//Evalua en la funcion 
+   	for j = lower_lim : formula_h : upper_lim
+	   	for i = 1 : tam_poly
+	   			acum_function = acum_function + ((j**i)*a_values((tam_poly+1) - i))
+	   	end
+	   	//Guarda el valor de la funcion en el primer valor
+	   	if j == 1 then
+	   		primerValorPol = acum_function;
+	   	//Guarda el valor de la funcion en el n valor
+	   	elseif  j == upper_lim then
+	   		nValorPol = acum_function;
+	   	//Guarda el valor de las funciones intermedias	
+	   	else 
+	   		sumation_functions = sumation_functions + acum_function;
+	   	end
+	   	acum_function = 0;
+	end
+
+	final_result = formula_h *(primerValorPol+(2*sumation_functions)+nValorPol);
+
+	disp("Solution is");
+	disp(final_result);
+
+endfunction
+
+function Integration_Roomberg()
+	disp("Executing Integration_Roomberg");
+endfunction
+
+
 function start()
     selected_menu = display_menu();
 
@@ -556,5 +617,18 @@ function start()
 		elseif selected_method == 0 then
 			disp("Ending program");
 		end;
+		//Funciones del ultimo parcial, no se agregaron en subMenu debido a las instrucciones
+	elseif selected_menu == 3 then
+		disp("Linear_Regression_Method");
+		Linear_Regression_Method();
+	elseif selected_menu == 4 then
+		disp("Interpolation_Direct_Method");
+		Interpolation_Direct_Method();
+	elseif selected_menu == 5 then
+		disp("Integration_Trapezoidal");
+		Integration_Trapezoidal();
+	elseif selected_menu == 6 then
+		disp("Integration_Roomberg");
+		Integration_Roomberg();
 	end;
 endfunction;
