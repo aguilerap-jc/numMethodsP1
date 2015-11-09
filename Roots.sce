@@ -10,6 +10,7 @@ function index_menu = display_menu()
 	disp("5) Integration Trapezoidal")
 	disp("6) Integration Roomberg")
     index_menu = input("Type the number of the numeric method you want to use: ");
+    funcprot(0);
 endfunction;
 
 function index_sub_menu_roots = display_menu_roots()
@@ -24,7 +25,7 @@ function index_sub_menu_roots = display_menu_roots()
     index_sub_menu_roots = input("Type the number of the numeric method you want to use: ");
 endfunction;
 
-function index_sub_menu_non_linear = display_menu_non_linear()
+function index_submenu_non_linear = display_menu_non_linear()
     disp("Select one of the following methods:");
 	disp("1) Gauss Elimination With Partial Pivoting");
 	disp("2) Gauss Jordan");
@@ -33,8 +34,15 @@ function index_sub_menu_non_linear = display_menu_non_linear()
 	disp("0) For going out of the program");
 	disp("");
 
-    index_sub_menu_non_linear = input("Type the number of the numeric method you want to use: ");
+    index_submenu_non_linear = input("Type the number of the numeric method you want to use: ");
 endfunction;
+
+function Index_Integration = display_menu_Integration()
+	disp("Choose how do you want to type the Integration_Method");
+	disp("1) Enter the function to evaluate");
+	disp("2) Enther the values of the segments");
+	Index_Integration = input("Type how you want to enter the values for the Integration_Method: ");
+endfunction
 
 function bisection_method()
 	// Ask for required data
@@ -291,7 +299,6 @@ function Partial_Pivoting_Method()
 	//Partial_Pivotin_method
 endfunction
 
-
 function Gauss_Jordan_Method()
 	//Gauss Jordan Method
 	disp("Gauss_Jordan_Method Function Executing");
@@ -512,56 +519,141 @@ function Linear_Regression_Method()
 	disp("Executing Linear_Regression_Method");
 endfunction
 
-function Interpolation_Direct_Method()
-	disp("Executing Interpolation_Direct_Method");
+function Interpolation_DirectM()
+	disp("Executing Interpolation_DirectM");
 endfunction
 
 function Integration_Trapezoidal()
 	disp("Executing Integration_Trapezoidal");
-	disp("Type the coefficients of the polynomial in a decreasing order of the function degree :");
-    disp("[1, 2, 3, 4] means 1*x^3 + 2*x^2 + 3*x^1 + 4*x^0");
-    a_values  = input("values  ");
-   	lower_lim = input("Insert the lower limit of the Integral : ");
-   	upper_lim = input("Insert the upper limit of the Integral : ");
-   	n_segments= input("Insert the number of segments :");
-   	integral_range = upper_lim - lower_lim;
-   	h = integral_range/n_segments;
-   	// I = (b-a)/(2*n) {sumation functions} 
-   	formula_h = h/2;  //formula_h = (b-a)/(2*n) 
-   	[x,tam_poly] = size(a_values);
-   	acum_function = 0;
-   	primerValorPol = 0;
-   	nValorPol = 0;
-   	sumation_functions = 0;
-   	func_val_array = zeros(n_segments);
-
-	//Evalua en la funcion 
-   	for j = lower_lim : formula_h : upper_lim
-	   	for i = 1 : tam_poly
-	   			acum_function = acum_function + ((j**i)*a_values((tam_poly+1) - i))
-	   	end
-	   	//Guarda el valor de la funcion en el primer valor
-	   	if j == 1 then
-	   		primerValorPol = acum_function;
-	   	//Guarda el valor de la funcion en el n valor
-	   	elseif  j == upper_lim then
-	   		nValorPol = acum_function;
-	   	//Guarda el valor de las funciones intermedias	
-	   	else 
-	   		sumation_functions = sumation_functions + acum_function;
-	   	end
+	sel_menu = display_menu_Integration();
+	if sel_menu == 1 then
+		disp("Executing Integration_Roomberg");
+		disp("Type the function to evaluate with the following format:");
+		disp(" y=a*x^n + b*x^(n-1) + c*x^(n-2) ..., where a, b, c are constants");
+		user_function = input("","string");
+		deff('[y] = ffunction(x)', user_function);
+		lower_lim = input("Insert the lower limit of the Integral : ");
+	   	upper_lim = input("Insert the upper limit of the Integral : ");
+	   	n_segments= input("Insert the number of segments :");
+	   	integral_range = upper_lim - lower_lim;
+	   	h = integral_range/n_segments;
+	   	// I = (b-a)/(2*n) {sumation functions} 
+	   	formula_h = h/2;  //formula_h = (b-a)/(2*n) 
 	   	acum_function = 0;
+	   	primerValorPol = 0;
+	   	nValorPol = 0;
+	   	sumation_functions = 0;
+	   	
+	   	for j = lower_lim : h : upper_lim
+		   			acum_function = acum_function + ffunction(j);
+		   	if j == lower_lim then
+		   		primerValorPol = acum_function;
+		   	//Guarda el valor de la funcion en el n valor
+		   	elseif  j == upper_lim then
+		   		nValorPol = acum_function;
+		   	//Guarda el valor de las funciones intermedias	
+		   	else 
+		   		sumation_functions = sumation_functions + acum_function;
+		   	end
+		   	acum_function = 0;
+		end
+
+		final_result = formula_h *(primerValorPol+(2*sumation_functions)+nValorPol);
+
+		disp("Solution is");
+		disp(final_result);
+		//Linea 44
+	elseif sel_menu == 2 then
+		//n_segments= input("Insert the number of segments :");
+	    x_values  = input("Enter the X segments as following [1,2,3,...,n] :  ");
+	    y_values  = input("Enter the Y segments as following [1,2,3,...,n] :  ");
+	   	[x,n_segments] = size(x_values);
+	   	if size(x_values) <> size(y_values) then
+	   		disp("The segments of X are different that segments of Y Insert them again please");
+	   	elseif (size(x_values) == size(y_values)) then
+			lower_X_lim = x_values(1,1);
+			upper_X_lim = x_values(1,n_segments);
+			lower_Y_lim = y_values(1,1);
+		   	upper_Y_lim = y_values(1,n_segments);
+		   	funct_h = (upper_X_lim - lower_X_lim)/(n_segments*2);
+		   	sumation_middle_values = 0;
+	   		for i = 2 : n_segments - 1
+	   			sumation_middle_values = sumation_middle_values + y_values(1,i);
+	   		end
+	   	
+	   		final_result = funct_h * (lower_Y_lim + sumation_middle_values*2 + upper_Y_lim);
+
+	   		disp("The result is");
+	   		disp(final_result);
+	   		//disp(upper_Y_lim,sumation_middle_values,lower_Y_lim);
+	   		//disp(funct_h);
+	    else disp("Not a Correct Input");
+	   	end
+	else disp("Not a Correct Input");
 	end
-
-	final_result = formula_h *(primerValorPol+(2*sumation_functions)+nValorPol);
-
-	disp("Solution is");
-	disp(final_result);
-
 endfunction
 
-function Integration_Roomberg()
-	disp("Executing Integration_Roomberg");
+function Integration_Romberg()
+		disp("Executing Integration_Roomberg");
+		disp("Type the function to evaluate with the following format:");
+		disp(" y=a*x^n + b*x^(n-1) + c*x^(n-2) ..., where a, b, c are constants");
+		user_function = input("","string");
+		deff('[y] = ffunction(x)', user_function);
+		lower_lim = input("Insert the lower limit of the Integral : ");
+	   	upper_lim = input("Insert the upper limit of the Integral : ");
+	   	iterations = input("Enter the number of Iterations : ");
+	   	h_vector = zeros(iterations);
+	   	i_matrix = zeros(iterations,iterations);
+
+	   	for j = 1 : iterations
+	   		if j == 1 then
+		   		h_vector(1) = upper_lim - lower_lim;
+		   	else 
+		   		h_vector(j) = h_vector(j-1)/2
+		   	end
+
+		   	for i = 1 : iterations
+				if j == 1 then
+					//call trapezoidal function
+					  	//n_segments= iterations;
+					   	//integral_range = upper_lim - lower_lim;
+					   	//h = integral_range/n_segments;
+					   	// I = (b-a)/(2*n) {sumation functions} 
+					   	//formula_h = h/2;  //formula_h = (b-a)/(2*n) 
+					   	formula_h = h_vector(j);
+					   	acum_function = 0;
+					   	primerValorPol = 0;
+					   	nValorPol = 0;
+					   	sumation_functions = 0;
+					   	
+					   	for r = lower_lim : h_vector(j) : upper_lim
+						   			acum_function = acum_function + ffunction(r);
+						   	if r == lower_lim then
+						   		primerValorPol = acum_function;
+						   	//Guarda el valor de la funcion en el n valor
+						   	elseif  r == upper_lim then
+						   		nValorPol = acum_function;
+						   	//Guarda el valor de las funciones intermedias	
+						   	else 
+						   		sumation_functions = sumation_functions + acum_function;
+						   	end
+						   	acum_function = 0;
+						end
+
+						final_result = formula_h *(primerValorPol+(2*sumation_functions)+nValorPol);
+						i_matrix(j,i) = final_result;
+				else	
+					if j <> 1 & j <= i then
+						i_matrix(j,i) = (4^(i-1) * i_matrix(j,i-1) - i_matrix(j-1,i-1))/(4^(j-1)-1);
+					end
+				end   		
+
+				if j == i then
+					disp(i_matrix(j,i));
+				end
+		   	end
+	   	end	
+	//Romberg Formula  Ii,j = (4^(j-1)* I i,j-1 - Ii-j,j-1) / ((4^j-1)-1
 endfunction
 
 
@@ -628,7 +720,7 @@ function start()
 		disp("Integration_Trapezoidal");
 		Integration_Trapezoidal();
 	elseif selected_menu == 6 then
-		disp("Integration_Roomberg");
-		Integration_Roomberg();
+		disp("Integration_Romberg");
+		Integration_Romberg();
 	end;
 endfunction;
