@@ -527,7 +527,6 @@ function Integration_Trapezoidal()
 	disp("Executing Integration_Trapezoidal");
 	sel_menu = display_menu_Integration();
 	if sel_menu == 1 then
-		disp("Executing Integration_Roomberg");
 		disp("Type the function to evaluate with the following format:");
 		disp(" y=a*x^n + b*x^(n-1) + c*x^(n-2) ..., where a, b, c are constants");
 		user_function = input("","string");
@@ -614,12 +613,6 @@ function Integration_Romberg()
 
 		   	for i = 1 : iterations
 				if j == 1 then
-					//call trapezoidal function
-					  	//n_segments= iterations;
-					   	//integral_range = upper_lim - lower_lim;
-					   	//h = integral_range/n_segments;
-					   	// I = (b-a)/(2*n) {sumation functions} 
-					   	//formula_h = h/2;  //formula_h = (b-a)/(2*n) 
 					   	formula_h = h_vector(j);
 					   	acum_function = 0;
 					   	primerValorPol = 0;
