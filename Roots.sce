@@ -721,6 +721,34 @@ function Integration_Romberg()
 	//Romberg Formula  Ii,j = (4^(j-1)* I i,j-1 - Ii-j,j-1) / ((4^j-1)-1
 endfunction
 
+function linear_regression()
+	disp("Executing Linear Regression");
+	matrix_data = input("Insert a matrix of two columns, the first one for x values and the other one for y values. The number of rows is equal to the number of data points");
+
+	//Initialize the needed variables
+	sum_xy       = 0;
+	sum_x        = 0;
+	sum_y        = 0;
+	sum_square_x = 0;
+	n            = size(matrix_data, "r");
+	a1           = 0;
+	a0           = 0;
+
+	for i = 1 : n
+		sum_x        = sum_x + matrix_data(i,1);
+		sum_y        = sum_y + matrix_data(i,2);
+		sum_xy       = sum_xy + matrix_data(i,1) * matrix_data(i,2);
+		sum_square_x = sum_square_x + matrix_data(i,1) * matrix_data(i,1);
+	end
+
+	a1 = (n * sum_xy - sum_x * sum_y) / (n * sum_square_x - sum_x * sum_x);
+	a0 = sum_y/n - a1 * sum_x/n;
+
+	disp("The result for a1 is ");
+	disp(a1);
+	disp("The result for a0 is ");
+	disp(a0);
+endfunction
 
 function start()
     selected_menu = display_menu();
@@ -787,5 +815,7 @@ function start()
 	elseif selected_menu == 6 then
 		disp("Integration_Romberg");
 		Integration_Romberg();
+	elseif  selected_menu == 7 then
+		linear_regression();
 	end;
 endfunction;
