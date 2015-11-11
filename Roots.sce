@@ -669,8 +669,10 @@ function Integration_Romberg()
 	   	iterations = input("Enter the number of Iterations : ");
 	   	h_vector = zeros(iterations);
 	   	i_matrix = zeros(iterations,iterations);
+	   	prev_r_values = zeros(iterations);
 
 	   	for j = 1 : iterations
+		   	cont_r_values = 0;
 	   		if j == 1 then
 		   		h_vector(1) = upper_lim - lower_lim;
 		   	else 
@@ -678,29 +680,33 @@ function Integration_Romberg()
 		   	end
 
 		   	for i = 1 : iterations
-				if j == 1 then
-					   	formula_h = h_vector(j);
+				if i == 1 then
 					   	acum_function = 0;
-					   	primerValorPol = 0;
-					   	nValorPol = 0;
+					   	primerValor = 0;
+					   	nValor = 0;
 					   	sumation_functions = 0;
 					   	
 					   	for r = lower_lim : h_vector(j) : upper_lim
-						   			acum_function = acum_function + ffunction(r);
+					   	   			acum_function = acum_function + ffunction(r);
 						   	if r == lower_lim then
-						   		primerValorPol = acum_function;
+						   		primerValor = acum_function;
 						   	//Guarda el valor de la funcion en el n valor
 						   	elseif  r == upper_lim then
-						   		nValorPol = acum_function;
+						   		nValor = acum_function;
 						   	//Guarda el valor de las funciones intermedias	
 						   	else 
 						   		sumation_functions = sumation_functions + acum_function;
-						   	end
-						   	acum_function = 0;
+						   		disp(r);
+						   		disp(sumation_functions);
+							end
+							   	acum_function = 0;
+								cont_r_values = cont_r_values +1;
 						end
-
-						final_result = formula_h *(primerValorPol+(2*sumation_functions)+nValorPol);
+						disp(cont_r_values);
+						final_result = h_vector(j) *(primerValor+(2*sumation_functions)+nValor);
 						i_matrix(j,i) = final_result;
+						//disp(final_result);
+						//disp(h_vector(j));
 				else	
 					if j <> 1 & j <= i then
 						i_matrix(j,i) = (4^(i-1) * i_matrix(j,i-1) - i_matrix(j-1,i-1))/(4^(j-1)-1);
@@ -708,7 +714,7 @@ function Integration_Romberg()
 				end   		
 
 				if j == i then
-					disp(i_matrix(j,i));
+					//disp(i_matrix(j,i));
 				end
 		   	end
 	   	end	
