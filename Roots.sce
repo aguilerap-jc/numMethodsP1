@@ -659,7 +659,7 @@ function Integration_Trapezoidal()
 endfunction
 
 function Integration_Romberg()
-		disp("Executing Integration_Roomberg");
+		disp("Executing Integration_Romberg");
 		disp("Type the function to evaluate with the following format:");
 		disp(" y=a*x^n + b*x^(n-1) + c*x^(n-2) ..., where a, b, c are constants");
 		user_function = input("","string");
