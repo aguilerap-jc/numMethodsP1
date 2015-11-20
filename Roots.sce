@@ -606,7 +606,9 @@ function Interpolation_Direct_Method()
 	x0 = inv(solveMatrix) * b
 	//display value of the coefficientes of the polynomial
 	disp("Coefficientes for the polynomial")
-	disp(x0)
+	for l = 1 : sizeOfsolveMatrix
+		disp("a" + string(l) + " = " + string(x0(l)))
+	end
 
 	rowInx0 = rowInCoefficients
 	total = 0
@@ -616,9 +618,17 @@ function Interpolation_Direct_Method()
 	  	total = total + ( x0(rowInx0) * valueToFind^exponent)
 	end
 	
+	//plot the equation
+		x = matrixA(:,1)
+		stringToDisplay = sprintf("X: %d, Y: %d", valueToFind, total);
+    	xstring( valueToFind, total, stringToDisplay );
+		plot(x, matrixA(:,2))
+	//plot the point we find where its X = valueToFind and Y = total
+		plot(valueToFind, total, 'o')
 	//display the value
 	disp("value of the function evaluated ")
 	disp(total)
+
 endfunction
 
 function Integration_Trapezoidal()
