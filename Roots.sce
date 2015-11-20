@@ -554,14 +554,17 @@ endfunction
 function Interpolation_Direct_Method()
 	disp("Executing Interpolation_DirectM");
 	disp("Type your table in matrix 2xN {1,2;3,4;5,6;7,8;9,10}")
-	matrixA = input("insert you table : ")
-	valueToFind = input("Introduce the value you want to find : ")
-	order = input("Introduce the order you want to use : ")
 
-	
+	matrixA = input("insert you table : ")
+	numOfRows = size (matrixA, "r")
+
+	disp("MAX VALUE to chose " + string(matrixA(numOfRows,1)) + ", MIN VALUE to chose " + string(matrixA(1,1)))
+	valueToFind = input("Introduce the value you want to find : ")
+
+	order = input("Introduce the order you want to use, MAX ORDER = " + string(numOfRows - 1) + " : ")
 	nearestValue = abs(matrixA(1,1) - valueToFind)
 	nearestValuePos = 1
-	numOfRows = size (matrixA, "r")
+
 	//extend 1 column matrix A to save wich are the neares values
 	matrixA = cat(2, matrixA, zeros (numOfRows, 1))
 	matrixA(1,3) = nearestValue
