@@ -541,6 +541,7 @@ function Linear_Regression_Method()
 		sum_xy       = sum_xy + matrix_data(i,1) * matrix_data(i,2);
 		sum_square_x = sum_square_x + matrix_data(i,1) * matrix_data(i,1);
 		plot(matrix_data(i,1), matrix_data(i,2), "ro");
+
 	end
 
 	a1 = (n * sum_xy - sum_x * sum_y) / (n * sum_square_x - sum_x * sum_x);
@@ -553,7 +554,6 @@ function Linear_Regression_Method()
 	end
 
 	plot(matrix_data(:,1),y_data);
-
 	disp("The result for a1 is ");
 	disp(a1);
 	disp("The result for a0 is ");
