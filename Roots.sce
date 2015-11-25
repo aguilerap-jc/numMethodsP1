@@ -806,7 +806,7 @@ function start()
 		//Funciones del ultimo parcial, no se agregaron en subMenu debido a las instrucciones
 	elseif selected_menu == 3 then
 		disp("Linear_Regression_Method");
-		Linear_Regression_Method();
+		linear_regression();
 	elseif selected_menu == 4 then
 		disp("Interpolation_Direct_Method");
 		Interpolation_Direct_Method();
@@ -817,6 +817,5 @@ function start()
 		disp("Integration_Romberg");
 		Integration_Romberg();
 	elseif  selected_menu == 7 then
-		linear_regression();
 	end;
 endfunction;
