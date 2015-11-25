@@ -534,7 +534,7 @@ function Interpolation_Direct_Method()
 	matrixA = cat(2, matrixA, zeros (numOfRows, 1))
 	matrixA(1,3) = nearestValue
 
-	//finding the neareast values	
+	//finding the neareast values
 	for i = 2 : numOfRows
 		//get values from the x axis
 	  	value = matrixA(i,1) - valueToFind 
