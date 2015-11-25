@@ -44,6 +44,13 @@ function Index_Integration = display_menu_Integration()
 	Index_Integration = input("Type how you want to enter the values for the Integration_Method: ");
 endfunction
 
+function Index_Romberg = display_menu_Romberg()
+	disp("Choose how do you want to type the Romberg_Method");
+	disp("1) Enter the  number of Iterations");
+	disp("2) Enther the minimum expected error");
+	Index_Romberg = input("Type how you want to enter the values for the Integration_Method: ");
+endfunction
+
 function bisection_method()
 	// Ask for required data
 	disp("Type the function to evaluate with the following format:");
@@ -517,24 +524,61 @@ endfunction
 
 function Linear_Regression_Method()
 	disp("Executing Linear_Regression_Method");
+	matrix_data = input("Insert a matrix of two columns, the first one for x values and the other one for y values. The number of rows is equal to the number of data points");
+
+	//Initialize the needed variables
+	sum_xy       = 0;
+	sum_x        = 0;
+	sum_y        = 0;
+	sum_square_x = 0;
+	n            = size(matrix_data, "r");
+	a1           = 0;
+	a0           = 0;
+
+	for i = 1 : n
+		sum_x        = sum_x + matrix_data(i,1);
+		sum_y        = sum_y + matrix_data(i,2);
+		sum_xy       = sum_xy + matrix_data(i,1) * matrix_data(i,2);
+		sum_square_x = sum_square_x + matrix_data(i,1) * matrix_data(i,1);
+		plot(matrix_data(i,1), matrix_data(i,2), "ro");
+	end
+
+	a1 = (n * sum_xy - sum_x * sum_y) / (n * sum_square_x - sum_x * sum_x);
+	a0 = sum_y/n - a1 * sum_x/n;
+
+	y_data = zeros(1,n);
+
+	for i = 1 : n
+		y_data(i) = matrix_data(i,1)*a1 + a0;
+	end
+
+	plot(matrix_data(:,1),y_data);
+
+	disp("The result for a1 is ");
+	disp(a1);
+	disp("The result for a0 is ");
+	disp(a0);
 endfunction
 
 function Interpolation_Direct_Method()
 	disp("Executing Interpolation_DirectM");
 	disp("Type your table in matrix 2xN {1,2;3,4;5,6;7,8;9,10}")
-	matrixA = input("insert you table : ")
-	valueToFind = input("Introduce the value you want to find : ")
-	order = input("Introduce the order you want to use : ")
 
-	
+	matrixA = input("insert you table : ")
+	numOfRows = size (matrixA, "r")
+
+	disp("MAX VALUE to chose " + string(matrixA(numOfRows,1)) + ", MIN VALUE to chose " + string(matrixA(1,1)))
+	valueToFind = input("Introduce the value you want to find : ")
+
+	order = input("Introduce the order you want to use, MAX ORDER = " + string(numOfRows - 1) + " : ")
 	nearestValue = abs(matrixA(1,1) - valueToFind)
 	nearestValuePos = 1
-	numOfRows = size (matrixA, "r")
+
 	//extend 1 column matrix A to save wich are the neares values
 	matrixA = cat(2, matrixA, zeros (numOfRows, 1))
 	matrixA(1,3) = nearestValue
 
-	//finding the neareast values
+	//finding the neareast values	
 	for i = 2 : numOfRows
 		//get values from the x axis
 	  	value = matrixA(i,1) - valueToFind 
@@ -574,7 +618,9 @@ function Interpolation_Direct_Method()
 	x0 = inv(solveMatrix) * b
 	//display value of the coefficientes of the polynomial
 	disp("Coefficientes for the polynomial")
-	disp(x0)
+	for l = 1 : sizeOfsolveMatrix
+		disp("a" + string(l) + " = " + string(x0(l)))
+	end
 
 	rowInx0 = rowInCoefficients
 	total = 0
@@ -584,16 +630,23 @@ function Interpolation_Direct_Method()
 	  	total = total + ( x0(rowInx0) * valueToFind^exponent)
 	end
 	
+	//plot the equation
+		x = matrixA(:,1)
+		stringToDisplay = sprintf("X: %d, Y: %d", valueToFind, total);
+    	xstring( valueToFind, total, stringToDisplay );
+		plot(x, matrixA(:,2))
+	//plot the point we find where its X = valueToFind and Y = total
+		plot(valueToFind, total, 'o')
 	//display the value
 	disp("value of the function evaluated ")
 	disp(total)
+
 endfunction
 
 function Integration_Trapezoidal()
 	disp("Executing Integration_Trapezoidal");
 	sel_menu = display_menu_Integration();
 	if sel_menu == 1 then
-		disp("Executing Integration_Roomberg");
 		disp("Type the function to evaluate with the following format:");
 		disp(" y=a*x^n + b*x^(n-1) + c*x^(n-2) ..., where a, b, c are constants");
 		user_function = input("","string");
@@ -660,7 +713,9 @@ function Integration_Trapezoidal()
 endfunction
 
 function Integration_Romberg()
-		disp("Executing Integration_Roomberg");
+	//disp("Executing Integration_Trapezoidal");
+	//sel_menu = display_menu_Integration();
+	//if sel_menu == 1 then
 		disp("Type the function to evaluate with the following format:");
 		disp(" y=a*x^n + b*x^(n-1) + c*x^(n-2) ..., where a, b, c are constants");
 		user_function = input("","string");
@@ -670,8 +725,12 @@ function Integration_Romberg()
 	   	iterations = input("Enter the number of Iterations : ");
 	   	h_vector = zeros(iterations);
 	   	i_matrix = zeros(iterations,iterations);
+	   	prev_r_values = zeros(iterations);
+	   	errors = zeros(iterations);
 
 	   	for j = 1 : iterations
+		   	cont_r_values = 0;
+		   	h = upper_lim -lower_lim;
 	   		if j == 1 then
 		   		h_vector(1) = upper_lim - lower_lim;
 		   	else 
@@ -679,76 +738,65 @@ function Integration_Romberg()
 		   	end
 
 		   	for i = 1 : iterations
-				if j == 1 then
-					//call trapezoidal function
-					  	//n_segments= iterations;
-					   	//integral_range = upper_lim - lower_lim;
-					   	//h = integral_range/n_segments;
-					   	// I = (b-a)/(2*n) {sumation functions} 
-					   	//formula_h = h/2;  //formula_h = (b-a)/(2*n) 
-					   	formula_h = h_vector(j);
+				if i == 1 then
 					   	acum_function = 0;
-					   	primerValorPol = 0;
-					   	nValorPol = 0;
+					   	primerValor = 0;
+					   	nValor = 0;
 					   	sumation_functions = 0;
-					   	
+					   	segments = 0;
+					   	segments = (upper_lim - lower_lim) / h_vector(j);
+
 					   	for r = lower_lim : h_vector(j) : upper_lim
-						   			acum_function = acum_function + ffunction(r);
+					   	   			acum_function = acum_function + ffunction(r);
 						   	if r == lower_lim then
-						   		primerValorPol = acum_function;
-						   	//Guarda el valor de la funcion en el n valor
+						   		primerValor = acum_function;
 						   	elseif  r == upper_lim then
-						   		nValorPol = acum_function;
-						   	//Guarda el valor de las funciones intermedias	
+						   		nValor = acum_function;
 						   	else 
 						   		sumation_functions = sumation_functions + acum_function;
-						   	end
-						   	acum_function = 0;
+							end
+							   	acum_function = 0;
+								cont_r_values = cont_r_values +1;
 						end
-
-						final_result = formula_h *(primerValorPol+(2*sumation_functions)+nValorPol);
+						final_result = (h/(2*segments)) * (primerValor+(2*sumation_functions)+nValor);	
 						i_matrix(j,i) = final_result;
+						i_results(j) = i_matrix(j,i);
 				else	
-					if j <> 1 & j <= i then
-						i_matrix(j,i) = (4^(i-1) * i_matrix(j,i-1) - i_matrix(j-1,i-1))/(4^(j-1)-1);
+					if j <> 1 & i <= j then
+						i_matrix(j,i) = (((4*(i-1))*(i_matrix(j,i-1))) - i_matrix(j-1,i-1))/ (4*(i-1)-1);
+						i_results(j) = i_matrix(j,i);
 					end
 				end   		
-
-				if j == i then
-					disp(i_matrix(j,i));
-				end
 		   	end
+		   	if j > 1 then
+		  		errors(j) = (i_results(j)-i_results(j-1))/i_results(j);
+		  	end
 	   	end	
-	//Romberg Formula  Ii,j = (4^(j-1)* I i,j-1 - Ii-j,j-1) / ((4^j-1)-1
-endfunction
+	   	disp(i_matrix,"I Matrix :");
+	   	disp(i_matrix(iterations,iterations), "Final Result = ")
+	   	disp(errors(iterations), "The error is : ")
 
-function linear_regression()
-	disp("Executing Linear Regression");
-	matrix_data = input("Insert a matrix of two columns, the first one for x values and the other one for y values. The number of rows is equal to the number of data points");
+	//elseif sel_menu == 2 then
+		//disp("Type the function to evaluate with the following format:");
+		//disp(" y=a*x^n + b*x^(n-1) + c*x^(n-2) ..., where a, b, c are constants");
+		//user_function = input("","string");
+		//deff('[y] = ffunction(x)', user_function);
+		//lower_lim = input("Insert the lower limit of the Integral : ");
+	   	//upper_lim = input("Insert the upper limit of the Integral : ");
+	   	//exp_error = input("Enter the expected error : ");
+	   	//h_vector = zeros(iterations);
+	   	//i_matrix = zeros(iterations,iterations);
+	   	//prev_r_values = zeros(iterations);
+	   	//errors = zeros(iterations);
+	   	//cont = 0;
+	   	//final_error = 100;
+		//while final_error < exp_error ,
 
-	//Initialize the needed variables
-	sum_xy       = 0;
-	sum_x        = 0;
-	sum_y        = 0;
-	sum_square_x = 0;
-	n            = size(matrix_data, "r");
-	a1           = 0;
-	a0           = 0;
-
-	for i = 1 : n
-		sum_x        = sum_x + matrix_data(i,1);
-		sum_y        = sum_y + matrix_data(i,2);
-		sum_xy       = sum_xy + matrix_data(i,1) * matrix_data(i,2);
-		sum_square_x = sum_square_x + matrix_data(i,1) * matrix_data(i,1);
-	end
-
-	a1 = (n * sum_xy - sum_x * sum_y) / (n * sum_square_x - sum_x * sum_x);
-	a0 = sum_y/n - a1 * sum_x/n;
-
-	disp("The result for a1 is ");
-	disp(a1);
-	disp("The result for a0 is ");
-	disp(a0);
+		//End while 
+		//end
+	//End if
+	//end
+//End function
 endfunction
 
 function start()
@@ -806,7 +854,7 @@ function start()
 		//Funciones del ultimo parcial, no se agregaron en subMenu debido a las instrucciones
 	elseif selected_menu == 3 then
 		disp("Linear_Regression_Method");
-		linear_regression();
+		Linear_Regression_Method();
 	elseif selected_menu == 4 then
 		disp("Interpolation_Direct_Method");
 		Interpolation_Direct_Method();
@@ -816,6 +864,7 @@ function start()
 	elseif selected_menu == 6 then
 		disp("Integration_Romberg");
 		Integration_Romberg();
-	elseif  selected_menu == 7 then
+	//elseif  selected_menu == 7 then
+	//	linear_regression();
 	end;
 endfunction;
