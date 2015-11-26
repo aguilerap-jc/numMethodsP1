@@ -678,9 +678,14 @@ function Integration_Trapezoidal()
 		end
 
 		final_result = formula_h *(primerValorPol+(2*sumation_functions)+nValorPol);
-
 		disp("Solution is");
 		disp(final_result);
+		//plot
+		x_values = lower_lim:.1:upper_lim
+		x_values2 = lower_lim:h:upper_lim
+		plot(x_values, ffunction)
+		plot(x_values2, ffunction, '--')
+
 		//Linea 44
 	elseif sel_menu == 2 then
 		//n_segments= input("Insert the number of segments :");
@@ -704,6 +709,8 @@ function Integration_Trapezoidal()
 
 	   		disp("The result is");
 	   		disp(final_result);
+			plot(x_values, y_values)
+
 	   		//disp(upper_Y_lim,sumation_middle_values,lower_Y_lim);
 	   		//disp(funct_h);
 	    else disp("Not a Correct Input");
