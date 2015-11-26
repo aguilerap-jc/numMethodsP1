@@ -782,7 +782,7 @@ function Integration_Romberg()
 	   	
 	   	x_values = lower_lim:.1:upper_lim
 		plot(x_values, ffunction)
-	   	for r = 0 :iterations
+	   	for r = 1 :iterations
 			x_values2 = lower_lim:h_vector(r):upper_lim
 			plot(x_values2,ffunction,'--')
 		end
