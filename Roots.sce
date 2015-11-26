@@ -779,9 +779,19 @@ function Integration_Romberg()
 		  		errors(j) = (i_results(j)-i_results(j-1))/i_results(j);
 		  	end
 	   	end	
+	   	
+	   	x_values = lower_lim:.1:upper_lim
+		plot(x_values, ffunction)
+	   	for r = 0 :iterations
+			x_values2 = lower_lim:h_vector(r):upper_lim
+			plot(x_values2,ffunction,'--')
+		end
+
 	   	disp(i_matrix,"I Matrix :");
 	   	disp(i_matrix(iterations,iterations), "Final Result = ")
 	   	disp(errors(iterations), "The error is : ")
+
+
 
 	//elseif sel_menu == 2 then
 		//disp("Type the function to evaluate with the following format:");
